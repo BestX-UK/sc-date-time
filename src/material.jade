@@ -32,14 +32,14 @@
 			.time-control
 				.time-inputs
 					input(type="number" min="{{_hours24 ? 0 : 1}}" max="{{_hours24 ? 23 : 12}}" ng-model="clock._hours")
-					md-button.hours.up(type="button" ng-click="clock._incHours(1)" aria-label="{{:: translations.incrementHours}}")
+					md-button.hours.up(type="button" tabindex="-1" ng-click="clock._incHours(1)" aria-label="{{:: translations.incrementHours}}")
 						i.fa.fa-caret-up
-					md-button.hours.down(type="button" ng-click="clock._incHours(-1)" aria-label="{{:: translations.decrementHours}}")
+					md-button.hours.down(type="button" tabindex="-1" ng-click="clock._incHours(-1)" aria-label="{{:: translations.decrementHours}}")
 						i.fa.fa-caret-down
 					input(type="number" min="0" max="59" ng-model="clock._minutes")
-					md-button.minutes.up(type="button" ng-click="clock._incMinutes(1)" aria-label="{{:: translations.incrementMinutes}}")
+					md-button.minutes.up(type="button" tabindex="-1" ng-click="clock._incMinutes(1)" aria-label="{{:: translations.incrementMinutes}}")
 						i.fa.fa-caret-up
-					md-button.minutes.down(type="button" ng-click="clock._incMinutes(-1)" aria-label="{{:: translations.decrementMinutes}}")
+					md-button.minutes.down(type="button" tabindex="-1" ng-click="clock._incMinutes(-1)" aria-label="{{:: translations.decrementMinutes}}")
 						i.fa.fa-caret-down
 				.seconds-inputs
 					input(type="number" min="0" max="59" ng-model="clock._seconds")
