@@ -102,6 +102,7 @@ angular.module('scDateTime', [])
 			scope.calendar._year = scope.date.getFullYear()
 			scope.calendar._month = scope.date.getMonth()
 			scope.clock._minutes = scope.date.getMinutes()
+			scope.clock._seconds = scope.date.getSeconds() + (scope.date.getMilliseconds()*0.001)
 			scope.clock._hours = if scope._hours24 then scope.date.getHours() else scope.date.getHours() % 12
 			if not scope._hours24 and scope.clock._hours is 0 then scope.clock._hours = 12
 			scope.calendar.yearChange save
@@ -201,6 +202,7 @@ angular.module('scDateTime', [])
 		scope.clock =
 			_minutes: 0
 			_hours: 0
+			_seconds: 0
 			_incHours: (inc) ->
 				@_hours = if scope._hours24
 				then Math.max 0, Math.min 23, @_hours + inc
@@ -216,6 +218,11 @@ angular.module('scDateTime', [])
 					scope.date.setHours(scope.date.getHours() + 12)
 				scope.saveUpdateDate()
 			isAM: -> scope.date.getHours() < 12
+		scope.$watch 'clock._seconds', (val, oldVal) ->
+			if val? and val isnt scope.date.getSeconds() and not isNaN(val) and 0 <= val <= 59
+				scope.date.setSeconds(Math.floor(val))
+				scope.date.setMilliseconds( (val - scope.date.getSeconds()) *1000 )
+				scope.saveUpdateDate()
 		scope.$watch 'clock._minutes', (val, oldVal) ->
 			if val? and val isnt scope.date.getMinutes() and not isNaN(val) and 0 <= val <= 59
 				scope.date.setMinutes val

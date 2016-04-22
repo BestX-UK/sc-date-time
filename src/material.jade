@@ -6,7 +6,7 @@
 			.main-title(ng-bind-html="display.main()")
 			.sub-title {{display.sub()}}
 	.control
-		.full-title {{display.fullTitle()}}
+		.full-title {{display.fullTitle()}} (local time)
 		.slider 
 			.date-control
 				.title
@@ -41,6 +41,9 @@
 						i.fa.fa-caret-up
 					md-button.minutes.down(type="button" ng-click="clock._incMinutes(-1)" aria-label="{{:: translations.decrementMinutes}}")
 						i.fa.fa-caret-down
+				.seconds-inputs
+					input(type="number" min="0" max="59" ng-model="clock._seconds")
+					seconds-label (seconds)
 				.buttons(ng-if="!_hours24")
 					md-button(type="button" ng-click="clock.setAM()" aria-label="{{:: translations.switchAmPm}}") {{date | date:'a'}}
 	.buttons
