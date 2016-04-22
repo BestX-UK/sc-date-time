@@ -9,7 +9,7 @@
     </div>
   </div>
   <div class="control">
-    <div class="full-title">{{display.fullTitle()}}</div>
+    <div class="full-title">{{display.fullTitle()}} (local time)</div>
     <div class="slider"> 
       <div class="date-control">
         <div class="title">
@@ -59,11 +59,15 @@
       <div class="time-control">
         <div class="time-inputs">
           <input type="number" min="{{_hours24 ? 0 : 1}}" max="{{_hours24 ? 23 : 12}}" ng-model="clock._hours"/>
-          <md-button type="button" ng-click="clock._incHours(1)" aria-label="{{:: translations.incrementHours}}" class="hours up"><i class="fa fa-caret-up"></i></md-button>
-          <md-button type="button" ng-click="clock._incHours(-1)" aria-label="{{:: translations.decrementHours}}" class="hours down"><i class="fa fa-caret-down"></i></md-button>
+          <md-button type="button" tabindex="-1" ng-click="clock._incHours(1)" aria-label="{{:: translations.incrementHours}}" class="hours up"><i class="fa fa-caret-up"></i></md-button>
+          <md-button type="button" tabindex="-1" ng-click="clock._incHours(-1)" aria-label="{{:: translations.decrementHours}}" class="hours down"><i class="fa fa-caret-down"></i></md-button>
           <input type="number" min="0" max="59" ng-model="clock._minutes"/>
-          <md-button type="button" ng-click="clock._incMinutes(1)" aria-label="{{:: translations.incrementMinutes}}" class="minutes up"><i class="fa fa-caret-up"></i></md-button>
-          <md-button type="button" ng-click="clock._incMinutes(-1)" aria-label="{{:: translations.decrementMinutes}}" class="minutes down"><i class="fa fa-caret-down"></i></md-button>
+          <md-button type="button" tabindex="-1" ng-click="clock._incMinutes(1)" aria-label="{{:: translations.incrementMinutes}}" class="minutes up"><i class="fa fa-caret-up"></i></md-button>
+          <md-button type="button" tabindex="-1" ng-click="clock._incMinutes(-1)" aria-label="{{:: translations.decrementMinutes}}" class="minutes down"><i class="fa fa-caret-down"></i></md-button>
+        </div>
+        <div class="seconds-inputs">
+          <input type="number" min="0" max="59" ng-model="clock._seconds"/>
+          <seconds-label>(seconds)</seconds-label>
         </div>
         <div ng-if="!_hours24" class="buttons">
           <md-button type="button" ng-click="clock.setAM()" aria-label="{{:: translations.switchAmPm}}">{{date | date:'a'}}</md-button>
