@@ -31,22 +31,22 @@
 				span.visuallyhidden {{modeSwitchText()}}
 			.time-control
 				.time-inputs
-					input(type="number" min="{{_hours24 ? 0 : 1}}" max="{{_hours24 ? 23 : 12}}" ng-model="clock._hours")
+					input(type="text" min="{{_hours24 ? 0 : 1}}" max="{{_hours24 ? 23 : 12}}" ng-model="clock._hours")
 					md-button.hours.up(type="button" tabindex="-1" ng-click="clock._incHours(1)" aria-label="{{:: translations.incrementHours}}")
 						i.fa.fa-caret-up
 					md-button.hours.down(type="button" tabindex="-1" ng-click="clock._incHours(-1)" aria-label="{{:: translations.decrementHours}}")
 						i.fa.fa-caret-down
-					input(type="number" min="0" max="59" ng-model="clock._minutes")
+					input(type="text" min="0" max="59" ng-model="clock._minutes")
 					md-button.minutes.up(type="button" tabindex="-1" ng-click="clock._incMinutes(1)" aria-label="{{:: translations.incrementMinutes}}")
 						i.fa.fa-caret-up
 					md-button.minutes.down(type="button" tabindex="-1" ng-click="clock._incMinutes(-1)" aria-label="{{:: translations.decrementMinutes}}")
 						i.fa.fa-caret-down
 				.seconds-inputs
-					input(type="number" min="0" max="59" ng-model="clock._seconds")
+					input(type="text" min="0" max="59" ng-model="clock._seconds")
 					seconds-label (seconds)
 				.buttons(ng-if="!_hours24")
 					md-button(type="button" ng-click="clock.setAM()" aria-label="{{:: translations.switchAmPm}}") {{date | date:'a'}}
 	.buttons
-		md-button(type="button" ng-click="setNow()" aria-label="{{:: translations.now}}") {{:: translations.now}}
+		md-button(type="button" ng-click="setNow()" aria-label="{{:: translations.now}}" style="float:left;") {{:: translations.now}}
 		md-button(type="button" ng-click="cancel()" ng-if="!autosave" aria-label="{{:: translations.cancel}}") {{:: translations.cancel}}
 		md-button(type="button" ng-click="save()" ng-if="!autosave" aria-label="{{:: translations.save}}") {{:: translations.save}}

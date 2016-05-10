@@ -108,7 +108,7 @@ angular.module('scDateTime', [])
 			scope.calendar.yearChange save
 		scope.display =
 			fullTitle: ->
-				_timeString = if scope._hours24 then 'HH:mm' else 'h:mm a'
+				_timeString = if scope._hours24 then 'HH:mm:ss.sss' else 'h:mm:ss.sss a'
 				if scope._displayMode is 'full' and not scope._verticalMode
 					_dateFilter scope.date, "EEEE d MMMM yyyy, #{_timeString}"
 				else if scope._displayMode is 'time' then _dateFilter scope.date, _timeString
@@ -219,7 +219,7 @@ angular.module('scDateTime', [])
 				scope.saveUpdateDate()
 			isAM: -> scope.date.getHours() < 12
 		scope.$watch 'clock._seconds', (val, oldVal) ->
-			if val? and val isnt scope.date.getSeconds() and not isNaN(val) and 0 <= val <= 59
+			if val? and val isnt (scope.date.getSeconds()+scope.date.getMilliseconds()*0.001) and not isNaN(val) and 0<=val<=59
 				scope.date.setSeconds(Math.floor(val))
 				scope.date.setMilliseconds( (val - scope.date.getSeconds()) *1000 )
 				scope.saveUpdateDate()
