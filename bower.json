@@ -1,6 +1,6 @@
 {
   "name": "sc-date-time-millis",
-  "version": "2.0.0",
+  "version": "2.0.3",
   "main": [
     "./dist/sc-date-time.js",
     "./dist/sc-date-time.css"
