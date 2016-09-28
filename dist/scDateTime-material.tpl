@@ -9,7 +9,7 @@
     </div>
   </div>
   <div class="control">
-    <div class="full-title">{{display.fullTitle()}}</div>
+    <div class="full-title">{{display.fullTitle()}} (GMT)</div>
     <div class="slider"> 
       <div class="date-control">
         <div class="title">
