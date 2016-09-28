@@ -1,11 +1,11 @@
 {
   "name": "sc-date-time-millis",
-  "version": "1.3.3",
+  "version": "2.0.0",
   "main": [
     "./dist/sc-date-time.js",
     "./dist/sc-date-time.css"
   ],
-  "description": "An implementation of the Material Design Date-Time picker for Angular-Material and bootstrap",
+  "description": "An implementation of the Material Design Date-Time picker for Angular-Material and bootstrap, interprets view values as GMT",
   "keywords": [
     "angular"
   ],
