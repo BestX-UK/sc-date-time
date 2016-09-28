@@ -53,11 +53,11 @@ angular.module('scDateTime', [])
 		attrs.$observe 'mindate', (val) ->
 			if val? and Date.parse val
 				scope.restrictions.mindate = new Date val
-				scope.restrictions.mindate.setHours 0, 0, 0, 0
+				scope.restrictions.mindate.setUTCHours 0, 0, 0, 0
 		attrs.$observe 'maxdate', (val) ->
 			if val? and Date.parse val
 				scope.restrictions.maxdate = new Date val
-				scope.restrictions.maxdate.setHours 23, 59, 59, 999
+				scope.restrictions.maxdate.setUTCHours 23, 59, 59, 999
 		scope._weekdays = scope._weekdays or scDateTimeI18n.weekdays
 		scope.$watch '_weekdays', (value) ->
 			if not value? or not angular.isArray value
@@ -99,87 +99,87 @@ angular.module('scDateTime', [])
 			maxdate: undefined
 		scope.setDate = (newVal, save=true) ->
 			scope.date = if newVal then new Date newVal else new Date()
-			scope.calendar._year = scope.date.getFullYear()
-			scope.calendar._month = scope.date.getMonth()
-			scope.clock._minutes = scope.date.getMinutes()
-			scope.clock._seconds = scope.date.getSeconds() + (scope.date.getMilliseconds()*0.001)
-			scope.clock._hours = if scope._hours24 then scope.date.getHours() else scope.date.getHours() % 12
+			scope.calendar._year = scope.date.getUTCFullYear()
+			scope.calendar._month = scope.date.getUTCMonth()
+			scope.clock._minutes = scope.date.getUTCMinutes()
+			scope.clock._seconds = scope.date.getUTCSeconds() + (scope.date.getUTCMilliseconds()*0.001)
+			scope.clock._hours = if scope._hours24 then scope.date.getUTCHours() else scope.date.getUTCHours() % 12
 			if not scope._hours24 and scope.clock._hours is 0 then scope.clock._hours = 12
 			scope.calendar.yearChange save
 		scope.display =
 			fullTitle: ->
 				_timeString = if scope._hours24 then 'HH:mm:ss.sss' else 'h:mm:ss.sss a'
 				if scope._displayMode is 'full' and not scope._verticalMode
-					_dateFilter scope.date, "EEEE d MMMM yyyy, #{_timeString}"
-				else if scope._displayMode is 'time' then _dateFilter scope.date, _timeString
-				else if scope._displayMode is 'date' then _dateFilter scope.date, 'EEE d MMM yyyy'
-				else _dateFilter scope.date, "d MMM yyyy, #{_timeString}"
+					_dateFilter scope.date, "EEEE d MMMM yyyy, #{_timeString}", "UTC"
+				else if scope._displayMode is 'time' then _dateFilter scope.date, _timeString, "UTC"
+				else if scope._displayMode is 'date' then _dateFilter scope.date, 'EEE d MMM yyyy', "UTC"
+				else _dateFilter scope.date, "d MMM yyyy, #{_timeString}", "UTC"
 			title: ->
 				if scope._mode is 'date'
 					_dateFilter scope.date, (if scope._displayMode is 'date' then 'EEEE' else "EEEE #{
 						if scope._hours24 then 'HH:mm' else 'h:mm a'
-					}")
-				else _dateFilter scope.date, 'MMMM d yyyy'
+					}"), "UTC"
+				else _dateFilter scope.date, 'MMMM d yyyy', "UTC"
 			super: ->
-				if scope._mode is 'date' then _dateFilter scope.date, 'MMM'
+				if scope._mode is 'date' then _dateFilter scope.date, 'MMM', "UTC"
 				else ''
 			main: -> $sce.trustAsHtml(
-				if scope._mode is 'date' then _dateFilter scope.date, 'd'
+				if scope._mode is 'date' then _dateFilter scope.date, 'd', "UTC"
 				else
-					if scope._hours24 then _dateFilter scope.date, 'HH:mm'
-					else "#{_dateFilter scope.date, 'h:mm'}<small>#{_dateFilter scope.date, 'a'}</small>"
+					if scope._hours24 then _dateFilter scope.date, 'HH:mm', "UTC"
+					else "#{_dateFilter scope.date, 'h:mm', 'UTC'}<small>#{_dateFilter scope.date, 'a', 'UTC'}</small>"
 			)
 			sub: ->
-				if scope._mode is 'date' then _dateFilter scope.date, 'yyyy'
-				else _dateFilter scope.date, 'HH:mm'
+				if scope._mode is 'date' then _dateFilter scope.date, 'yyyy', 'UTC'
+				else _dateFilter scope.date, 'HH:mm', 'UTC'
 
 		scope.calendar =
 			_month: 0
 			_year: 0
 			_months: []
-			_allMonths: (_dateFilter new Date(0, i), 'MMMM' for i in [0..11])
-			offsetMargin: -> "#{new Date(@_year, @_month).getDay() * 2.7}rem"
-			isVisible: (d) -> new Date(@_year, @_month, d).getMonth() is @_month
+			_allMonths: (_dateFilter new Date( Date.UTC(0, i)), 'MMMM' for i in [0..11])
+			offsetMargin: -> "#{new Date( Date.UTC(@_year, @_month)).getUTCDay() * 2.7}rem"
+			isVisible: (d) -> new Date( Date.UTC(@_year, @_month, d)).getUTCMonth() is @_month
 			isDisabled: (d) ->
-				currentDate = new Date(@_year, @_month, d)
+				currentDate = new Date( Date.UTC(@_year, @_month, d))
 				mindate = scope.restrictions.mindate
 				maxdate = scope.restrictions.maxdate
 				(mindate? and currentDate < mindate) or (maxdate? and currentDate > maxdate)
 			isPrevMonthButtonHidden: () ->
 				date = scope.restrictions["mindate"]
-				date? and @_month <= date.getMonth() and @_year <= date.getFullYear()
+				date? and @_month <= date.getUTCMonth() and @_year <= date.getUTCFullYear()
 			isNextMonthButtonHidden: () ->
 				date = scope.restrictions["maxdate"]
-				date? and @_month >= date.getMonth() and @_year >= date.getFullYear()
+				date? and @_month >= date.getUTCMonth() and @_year >= date.getUTCFullYear()
 			class: (d) ->
 				classString = ''
 				# coffeelint: disable=max_line_length
-				if scope.date? and new Date(@_year, @_month, d).getTime() is new Date(scope.date.getTime()).setHours(0,
+				if scope.date? and new Date(Date.UTC(@_year, @_month, d)).getTime() is new Date(scope.date.getTime()).setUTCHours(0,
 					0, 0, 0)
 					classString += "selected"
-				if new Date(@_year, @_month, d).getTime() is new Date().setHours(0, 0, 0, 0)
+				if new Date(Date.UTC(@_year, @_month, d)).getTime() is new Date().setUTCHours(0, 0, 0, 0)
 					classString += " today"
 				classString
 # coffeelint: enable=max_line_length
 			select: (d) ->
-				scope.date.setFullYear @_year, @_month, d
+				scope.date.setUTCFullYear @_year, @_month, d
 				scope.saveUpdateDate()
 			monthChange: (save=true) ->
-				if not @_year? or isNaN @_year then @_year = new Date().getFullYear()
+				if not @_year? or isNaN @_year then @_year = new Date().getUTCFullYear()
 				mindate = scope.restrictions.mindate
 				maxdate = scope.restrictions.maxdate
-				if mindate? and mindate.getFullYear() is @_year and mindate.getMonth() >= @_month
-					@_month = Math.max mindate.getMonth(), @_month
-				if maxdate? and maxdate.getFullYear() is @_year and maxdate.getMonth() <= @_month
-					@_month = Math.min maxdate.getMonth(), @_month
-				scope.date.setFullYear @_year, @_month
-				if scope.date.getMonth() isnt @_month then scope.date.setDate 0
+				if mindate? and mindate.getUTCFullYear() is @_year and mindate.getUTCMonth() >= @_month
+					@_month = Math.max mindate.getUTCMonth(), @_month
+				if maxdate? and maxdate.getUTCFullYear() is @_year and maxdate.getUTCMonth() <= @_month
+					@_month = Math.min maxdate.getUTCMonth(), @_month
+				scope.date.setUTCFullYear @_year, @_month
+				if scope.date.getUTCMonth() isnt @_month then scope.date.setUTCDate 0
 				if mindate? and scope.date < mindate
-					scope.date.setDate mindate.getTime()
-					scope.calendar.select mindate.getDate()
+					scope.date.setUTCDate mindate.getTime()
+					scope.calendar.select mindate.getUTCDate()
 				if maxdate? and scope.date > maxdate
-					scope.date.setDate maxdate.getTime()
-					scope.calendar.select maxdate.getDate()
+					scope.date.setUTCDate maxdate.getTime()
+					scope.calendar.select maxdate.getUTCDate()
 				if save then scope.saveUpdateDate()
 			_incMonth: (months) ->
 				@_month += months
@@ -195,8 +195,8 @@ angular.module('scDateTime', [])
 				if not scope.calendar._year? or scope.calendar._year is '' then return
 				mindate = scope.restrictions.mindate
 				maxdate = scope.restrictions.maxdate
-				i = if mindate? and mindate.getFullYear() is scope.calendar._year then mindate.getMonth() else 0
-				len = if maxdate? and maxdate.getFullYear() is scope.calendar._year then maxdate.getMonth() else 11
+				i = if mindate? and mindate.getUTCFullYear() is scope.calendar._year then mindate.getUTCMonth() else 0
+				len = if maxdate? and maxdate.getUTCFullYear() is scope.calendar._year then maxdate.getUTCMonth() else 11
 				scope.calendar._months = scope.calendar._allMonths.slice i, len + 1
 				scope.calendar.monthChange save
 		scope.clock =
@@ -213,19 +213,19 @@ angular.module('scDateTime', [])
 				if isNaN @_minutes then @_minutes = 0
 			setAM: (b = not @isAM()) ->
 				if b and not @isAM()
-					scope.date.setHours(scope.date.getHours() - 12)
+					scope.date.setUTCHours(scope.date.getUTCHours() - 12)
 				else if not b and @isAM()
-					scope.date.setHours(scope.date.getHours() + 12)
+					scope.date.setUTCHours(scope.date.getUTCHours() + 12)
 				scope.saveUpdateDate()
-			isAM: -> scope.date.getHours() < 12
+			isAM: -> scope.date.getUTCHours() < 12
 		scope.$watch 'clock._seconds', (val, oldVal) ->
-			if val? and val isnt (scope.date.getSeconds()+scope.date.getMilliseconds()*0.001) and not isNaN(val) and 0<=val<=59
-				scope.date.setSeconds(Math.floor(val))
-				scope.date.setMilliseconds( (val - scope.date.getSeconds()) *1000 )
+			if val? and val isnt (scope.date.getUTCSeconds()+scope.date.getUTCMilliseconds()*0.001) and not isNaN(val) and 0<=val<=59
+				scope.date.setUTCSeconds(Math.floor(val))
+				scope.date.setUTCMilliseconds( (val - scope.date.getUTCSeconds()) *1000 )
 				scope.saveUpdateDate()
 		scope.$watch 'clock._minutes', (val, oldVal) ->
-			if val? and val isnt scope.date.getMinutes() and not isNaN(val) and 0 <= val <= 59
-				scope.date.setMinutes val
+			if val? and val isnt scope.date.getUTCMinutes() and not isNaN(val) and 0 <= val <= 59
+				scope.date.setUTCMinutes val
 				scope.saveUpdateDate()
 		scope.$watch 'clock._hours', (val) ->
 			if val? and not isNaN(val)
@@ -233,8 +233,8 @@ angular.module('scDateTime', [])
 					if val is 24 then val = 12
 					else if val is 12 then val = 0
 					else if not scope.clock.isAM() then val += 12
-				if val isnt scope.date.getHours()
-					scope.date.setHours val
+				if val isnt scope.date.getUTCHours()
+					scope.date.setUTCHours val
 					scope.saveUpdateDate()
 
 		scope.setNow = ->

@@ -1,0 +1,14 @@
+
+gulpfile.json can be created using coffee-script loaded in node_modules by 'npm install'
+
+  ./node_modules/coffee-script/bin/coffee gulpfile.coffee
+  
+This sc-date-time-millis bower package is loaded as a bower dependency by the main TCA web app
+so any changes to this project must be pushed to github
+The process for updating the bower package will involve three primary steps:
+
+    Make the necessary changes to your package artifact(s) (bug fixes, new features, etc, etc...whatever it might be)
+    Update the bower.json file with the new version for the package
+    Commit the changes
+    Tag the repository
+    Push your changes to git (don't forget to include the --tags switch with your push command to your remote!)
