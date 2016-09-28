@@ -12,3 +12,14 @@ The process for updating the bower package will involve three primary steps:
     Commit the changes
     Tag the repository
     Push your changes to git (don't forget to include the --tags switch with your push command to your remote!)
+
+    eg:
+        # commit your changes
+        git commit -am "Made some awesome new changes, now its even awesomer"
+
+        # tag the commit
+        git tag -a v0.0.2 -m "Release version 0.0.2"
+
+        # push to GitHub
+        git push origin master --tags
+  
